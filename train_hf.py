@@ -924,7 +924,15 @@ def main():
             if saver is not None:
                 # save proper checkpoint with eval metric
                 best_metric, best_epoch = saver.save_checkpoint(epoch, metric=latest_metric)
-                save_for_hf(model, args.output)
+
+            if "PMIX_RANK" in os.environ:
+                if os.environ["PMIX_RANK"] == '0':
+                    control_node = True
+            else:
+                control_node = True
+
+            if control_node:
+                save_for_hf(model, args.output, safe_serialization=True)
 
             if lr_scheduler is not None:
                 # step LR for next epoch
