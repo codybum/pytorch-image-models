@@ -31,6 +31,7 @@ import torchvision.utils
 import yaml
 from torch.nn.parallel import DistributedDataParallel as NativeDDP
 
+import timm
 from timm import utils
 from timm.data import create_dataset, create_loader, resolve_data_config, Mixup, FastCollateMixup, AugMixDataset
 from timm.layers import convert_splitbn_model, convert_sync_batchnorm, set_fast_norm
@@ -932,7 +933,9 @@ def main():
                 control_node = True
 
             if control_node:
-                save_for_hf(model, os.path.join(args.output, 'epoch_' + str(epoch)), safe_serialization=True)
+                save_for_hf(model, os.path.join(args.output, 'epoch_' + str(epoch)), safe_serialization=False)
+                #timm.models.push_to_hf_hub(model, 'resnet18-random')
+
 
             if lr_scheduler is not None:
                 # step LR for next epoch
