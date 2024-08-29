@@ -932,7 +932,7 @@ def main():
                 control_node = True
 
             if control_node:
-                save_for_hf(model, args.output, safe_serialization=True)
+                save_for_hf(model, os.path.join(args.output, 'epoch_' + str(epoch)), safe_serialization=True)
 
             if lr_scheduler is not None:
                 # step LR for next epoch
